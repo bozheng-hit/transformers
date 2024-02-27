@@ -78,6 +78,23 @@ class Qwen2Config(PretrainedConfig):
             The number of layers that use SWA (Sliding Window Attention). The bottom layers use SWA while the top use full attention.
         attention_dropout (`float`, *optional*, defaults to 0.0):
             The dropout ratio for the attention probabilities.
+                expert_interval (`int`, *optional*, defaults to None):
+            The frequency of the MoE layer. If not specified, MoE will not be enabled.
+        moe_intermediate_size (`int`, *optional*, defaults to None):
+            Intermediate size of the routed expert.
+        shared_expert_intermediate_size (`int`, *optional*, defaults to None):
+            Intermediate size of the shared expert.
+        shared_expert_gate (`bool`, *optional*, defaults to `False`):
+            Whether to use gating mechinism for the shared expert.
+        num_experts_per_tok (`int`, *optional*, defaults to None):
+            Number of selected experts.
+        num_experts (`int`, *optional*, defaults to None):
+            Number of routed experts.
+        output_router_logits (`bool`, *optional*, defaults to `False`):
+            Whether or not the router logits should be returned by the model. Enabeling this will also
+            allow the model to output the auxiliary loss, including load balancing loss and router z-loss.
+        router_aux_loss_coef (`float`, *optional*, defaults to 0.001):
+            The aux loss factor for the total loss.
 
     ```python
     >>> from transformers import Qwen2Model, Qwen2Config
@@ -114,6 +131,15 @@ class Qwen2Config(PretrainedConfig):
         sliding_window=4096,
         max_window_layers=28,
         attention_dropout=0.0,
+        expert_interval=None,
+        moe_intermediate_size=None,
+        shared_expert_intermediate_size=None,
+        shared_expert_gate=False,
+        num_experts_per_tok=None,
+        num_experts=None,
+        norm_topk_prob=False,
+        output_router_logits=False,
+        router_aux_loss_coef=0.001,
         **kwargs,
     ):
         self.vocab_size = vocab_size
@@ -137,6 +163,17 @@ class Qwen2Config(PretrainedConfig):
         self.use_cache = use_cache
         self.rope_theta = rope_theta
         self.attention_dropout = attention_dropout
+        
+        # MoE arguments
+        self.expert_interval = expert_interval
+        self.moe_intermediate_size = moe_intermediate_size
+        self.shared_expert_intermediate_size = shared_expert_intermediate_size
+        self.shared_expert_gate = shared_expert_gate
+        self.num_experts_per_tok = num_experts_per_tok
+        self.num_experts = num_experts
+        self.norm_topk_prob = norm_topk_prob
+        self.output_router_logits = output_router_logits
+        self.router_aux_loss_coef = router_aux_loss_coef
 
         super().__init__(
             tie_word_embeddings=tie_word_embeddings,
