@@ -78,7 +78,7 @@ class Qwen2Config(PretrainedConfig):
             The number of layers that use SWA (Sliding Window Attention). The bottom layers use SWA while the top use full attention.
         attention_dropout (`float`, *optional*, defaults to 0.0):
             The dropout ratio for the attention probabilities.
-                expert_interval (`int`, *optional*, defaults to None):
+        expert_interval (`int`, *optional*, defaults to None):
             The frequency of the MoE layer. If not specified, MoE will not be enabled.
         moe_intermediate_size (`int`, *optional*, defaults to None):
             Intermediate size of the routed expert.
